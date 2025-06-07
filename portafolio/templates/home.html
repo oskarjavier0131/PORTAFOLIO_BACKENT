@@ -1,0 +1,118 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="row justify-content-center bg-black text-center py-4 px-3">
+    <div class="col-12">
+        <pre class="ascii-banner">
+  ____    _    ____ _  __   _   _ _____ _   _ _______ 
+ | __ )  / \  / ___| |/ /  | | | | ____| \ | | ____\ \
+ |  _ \ / _ \| |   | ' /   | | | |  _| |  \| |  _|  | |
+ | |_) / ___ \ |___| . \   | |_| | |___| |\  | |___ | |
+ |____/_/   \_\____|_|\_\   \___/|_____|_| \_|_____|/ /
+                                                      /_/ 
+        </pre>
+    </div>
+
+    <div class="col-12">
+        <div class="terminal-style p-4 mx-auto" style="max-width: 800px;">
+            <span class="console-line" id="console-text"></span><span class="console-cursor"></span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .ascii-banner {
+        color: #00ff00;
+        font-family: 'Courier New', monospace;
+        font-size: 0.75em;
+        white-space: pre-wrap;
+        overflow-x: auto;
+    }
+
+    .console-cursor {
+        display: inline-block;
+        width: 10px;
+        height: 18px;
+        background: #00ff00;
+        animation: blink 1s steps(1) infinite;
+        vertical-align: bottom;
+        margin-left: 2px;
+    }
+
+    @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+    }
+
+    .terminal-style {
+        background: #101010;
+        color: #00ff00;
+        font-family: 'Fira Code', monospace;
+        border: 2px solid #00ff00;
+        border-radius: 10px;
+        box-shadow: 0 0 20px #00ff00a0;
+        min-height: 150px;
+        word-break: break-word;
+        white-space: pre-wrap;
+    }
+
+    @media (max-width: 768px) {
+        .ascii-banner {
+            font-size: 0.65em;
+        }
+
+        .terminal-style {
+            font-size: 0.9em;
+            padding: 1.2rem;
+        }
+    }
+</style>
+
+<script>
+    const text = `> Soy Oscar Javier Castelblanco\n> Ingeniero de datos con 7 años de experiencia.\n> Me enfoco en el desarrollo de soluciones integrales:\n  - ETL\n  - Backend & APIs REST\n  - Visualización de datos\n\n> Siempre listo para nuevos desafíos.`;
+    let i = 0;
+
+    function typeWriter() {
+        const el = document.getElementById("console-text");
+        if (i < text.length) {
+            if (text[i] === "\n") {
+                el.innerHTML += "<br>";
+            } else {
+                el.innerHTML += text[i];
+            }
+            i++;
+            setTimeout(typeWriter, 25);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", typeWriter);
+</script>
+
+<div class="container my-5 text-white">
+    <h3 class="text-center text-success mb-2">PROYECTOS</h3>
+    <p class="text-center text-muted mb-4">Click para ver un proyecto... 👽🛸👽</p>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        {% for project in projects %}
+        <div class="col">
+            <div class="card bg-dark border-success text-white h-100 shadow-sm">
+                <img src="{{ project.image.url }}" alt="Imagen del proyecto {{ project.title }}" class="card-img-top" style="object-fit: cover; height: 180px;">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title text-success">{{ project.title }}</h5>
+                        <p class="card-text">{{ project.description }}</p>
+                    </div>
+                    {% if project.url %}
+                    <a href="{{ project.url }}" class="btn btn-outline-success btn-sm mt-3" target="_blank">Ver Proyecto</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
